@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>在庫新規登録</title>
+
+</head>
+<body>
+<header>
+  <div>
+    <a th:href="@{/stock}">StockApp</a>
+  </div>
+  <div class="header-right">
+    <div class="user_name">
+      ログインユーザー名:
+    </div>
+    <div>
+      <form method="POST">
+        <button type="submit" class="logout">ログアウト</button>
+      </form>
+    </div>
+  </div>
+</header>
+<div class="new-registering">
+  <h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
+  <form id="form" method="POST" class="needs-validation" novalidate th:action="${update}? @{/stock/update}: @{/stock/insert}" th:object="${putForm}" onsubmit="return check()">
+    <div class="registring">
+      <h2 th:text="${update}? 編集: 新規作成"></h2>
+    </div>
+    <div class="new-register-form">
+
+      <div class="register-contents">
+        <label for="date_sample">日付</label><br>
+        <input type="text" name="ymdForm" id="date_sample" th:value="${#dates.format(putForm.ymdForm, 'YYYY/MM/dd')}" class="form-select" required>
+      </div>
+
+      <div class="register-contents">
+        <label for="categoryForm">分類</label><br>
+        <select id="categoryForm" class="form-select" name="categoryForm" th:value="*{categoryForm}" required>
+          <option selected></option>
+          <option value="1" th:selected="*{categoryForm} == 1">お米・パン</option>
+          <option value="2" th:selected="*{categoryForm} == 2">果物</option>
+          <option value="3" th:selected="*{categoryForm} == 3">野菜</option>
+          <option value="4" th:selected="*{categoryForm} == 4">肉</option>
+          <option value="5" th:selected="*{categoryForm} == 5">魚</option>
+          <option value="6" th:selected="*{categoryForm} == 6">飲み物</option>
+          <option value="7" th:selected="*{categoryForm} == 7">調味料</option>
+          <option value="8" th:selected="*{categoryForm} == 8">洗剤(キッチン)</option>
+          <option value="9" th:selected="*{categoryForm} == 9">洗剤(衣類)</option>
+          <option value="10" th:selected="*{categoryForm} == 10">洗剤(その他)</option>
+          <option value="11" th:selected="*{categoryForm} == 11">日用品(キッチン)</option>
+          <option value="12" th:selected="*{categoryForm} == 12">日用品(その他)</option>
+          <option value="13" th:selected="*{categoryForm} == 13">その他</option>
+        </select>
+      </div>
+
+      <div class="register-contents">
+        <label for="title">題名</label><br>
+        <input type="text" name="titleForm" id="title" th:value="*{titleForm}" class="form-select" required>
+      </div>
+
+      <div class="register-contents">
+        <label for="quantity">数量</label><br>
+        <input type="text" inputmode="numeric" name="quantityForm" id="quantity" th:value="*{quantityForm}" class="form-select" required>
+      </div>
+    </div>
+    <input type="hidden"  name="id" th:value="*{id}">
+    <div class="btn-insert-back">
+      <div>
+        <button type="submit" class="btn-insert" th:name="${update}? update: insert" th:text="${update}? 更新: 登録" onClick="btn='insert'"></button>
+      </div>
+      <div>
+        <button type="submit" name="back" class="btn-back" onClick="btn='back'">一覧へ</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+</body>
+<script>
+    $('#date_sample').datepicker({
+      format: 'yyyy/mm/dd',
+      language: 'ja',
+      autoclose: true,
+    });
+
+    const check = (event) => {
+      //　一覧ボタン押下した場合はチェックしない
+      if (btn === 'back'){
+        return true;
+      }
+
+      const form = document.getElementById('form');
+      if (!form.checkValidity()){
+        form.classList.add('was-validated');
+        return false;
+      } else {
+        return true;
+      }
+    };
+</script>
+</html>

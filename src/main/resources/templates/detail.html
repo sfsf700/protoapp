@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>編集</title>
+</head>
+<body>
+<header>
+    <div>
+        <a th:href="@{/stock}">StockApp</a>
+    </div>
+    <div class="header-right">
+        <div class="user_name">
+            ログインユーザー名:
+        </div>
+        <div>
+            <form method="POST">
+                <button type="submit" class="logout">ログアウト</button>
+            </form>
+        </div>
+    </div>
+</header>
+<body>
+<div th:if="${error}">
+    <h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
+    <p>管理者にご連絡ください</p>
+    <form method="POST" th:action="@{/stock/form}">
+        <button type="submit" name="back" class="btn-back">一覧へ</button>
+    </form>
+</div>
+<div  th:if="${stock}"  class="new-registering">
+    <form method="POST" th:action="@{/stock/form}" th:object="${stock}">
+        <div class="registring">
+            <h2>詳細</h2>
+        </div>
+        <div class="new-register-form">
+            <div class="register-contents">
+                <label for="ymd">日付 : </label>
+                <span th:text="${stock.ymd}" name="ymdForm" id="ymd"></span>
+            </div>
+
+            <div class="register-contents">
+                <label for="category">分類 : </label>
+                <span th:text="${stock.name}" name="categoryForm" id="category" ></span>
+            </div>
+            <div class="register-contents">
+                <label for="title">題名 : </label>
+                <span th:text="${stock.title}" name="titleForm" id="title"></span>
+            </div>
+            <div class="register-contents">
+                <label for="quantity">数量 : </label>
+                <span th:text="${stock.quantity}" name="quantityForm" id="quantity"></span>
+            </div>
+        </div>
+
+        <div class="btn-insert-back">
+            <div class="col-1">
+                <button type="submit" name="update" class="btn-insert">編集</button>
+            </div>
+            <div class="col-1">
+                <button type="submit" name="back" class="btn-back">一覧へ</button>
+            </div>
+        </div>
+        <input type="hidden" name="updateFlag" th:value=true>
+        <input type="hidden" name="id" th:value="${stock.id}">
+        <input type="hidden" name="categoryForm" th:value="${stock.category}">
+        <input type="hidden" name="titleForm" th:value="${stock.title}">
+        <input type="hidden" name="ymdForm" th:value="${stock.ymd}">
+        <input type="hidden" name="quantityForm" th:value="${stock.quantity}">
+
+    </form>
+</div>
+</body>
+</html>

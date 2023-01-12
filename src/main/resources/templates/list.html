@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>在庫管理アプリ</title>
+</head>
+<body>
+<header>
+    <div>
+        <a th:href="@{/stock}">StockApp</a>
+    </div>
+    <div class="header-right">
+        <div class="user_name">
+            <span th:text="'ログインユーザ：' + ${#httpServletRequest.getRemoteUser}"></span>
+        </div>
+        <div>
+            <form method="POST" th:action="@{/logout}">
+                <button type="submit" class="logout">ログアウト</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div class="search-header">
+    <form method="GET" th:action="@{/stock}" th:object="${getForm}">
+        <div class="search-box">
+            <div class="any-1">
+                <label for="category" class="any-2">分類</label><br>
+                <select id="category" name="category" class="form-control" th:value="${getForm.category}">
+                    <option></option>
+                    <option value="1" th:selected="*{category} == 1">お米・パン</option>
+                    <option value="2" th:selected="*{category} == 2">果物</option>
+                    <option value="3" th:selected="*{category} == 3">野菜</option>
+                    <option value="4" th:selected="*{category} == 4">肉</option>
+                    <option value="5" th:selected="*{category} == 5">魚</option>
+                    <option value="6" th:selected="*{category} == 6">飲み物</option>
+                    <option value="7" th:selected="*{category} == 7">調味料</option>
+                    <option value="8" th:selected="*{category} == 8">洗剤(キッチン)</option>
+                    <option value="9" th:selected="*{category} == 9">洗剤(衣類)</option>
+                    <option value="10" th:selected="*{category} == 10">洗剤(その他)</option>
+                    <option value="11" th:selected="*{category} == 11">日用品(キッチン)</option>
+                    <option value="12" th:selected="*{category} == 12">日用品(その他)</option>
+                    <option value="13" th:selected="*{category} == 13">その他</option>
+                </select>
+            </div>
+
+            <div class="any-1">
+                <label for="category" class="any-2">在庫名</label><br>
+                <input type="text" class="form-control" id="date_sample" name="date">
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="search-button">検索</button>
+        </div>
+    </form>
+</div>
+
+<div class="stock-main" style="padding: 35px">
+    <table class="main-content">
+        <thead>
+            <tr class="contents" align="left">
+                <th class="content">日付</th>
+                <th class="content">分類</th>
+                <th class="content">題名</th>
+                <th class="content">数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item: ${list}">
+                <td th:text="${item.ymd}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.title}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td class="btn-edit-destroy">
+                    <a class="edit" th:href="@{/stock/{id}(id=${item.id})}">詳細</a>
+                </td>
+                <td class="btn-edit-destroy">
+                    <form method="POST" th:action="@{/stock/delete}" style="display: table-row-group" onSubmit="return check()">
+                        <input type="hidden" th:value="${item.id}" name="id">
+                        <button type="submit"  class="btn-danger" >削除</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="register">
+    <form method="POST" th:action="@{/stock/form}">
+        <div class="stock-register">
+            <button type="submit" class="btn-stock-register">在庫登録</button>
+            <input type="hidden" name="isUpdate" value="false">
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+<!--
+function check(){
+	if(window.confirm('削除してよろしいですか？')){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+// -->
+</script>
+
+</body>
+</html>
